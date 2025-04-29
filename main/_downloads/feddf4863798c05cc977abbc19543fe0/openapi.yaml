@@ -11,7 +11,7 @@ components:
         protocols:
           description: Protocols that a device conforms to, indicating its capabilities
           items:
-            type: string
+            $ref: '#/components/schemas/ProtocolInfo'
           title: Protocols
           type: array
       required:
@@ -37,18 +37,23 @@ components:
       additionalProperties: false
       description: State of internal environment.
       properties:
+        environment_id:
+          description: Unique ID for the environment instance, can be used to differentiate
+            between a new environment and old that has been torn down
+          format: uuid
+          title: Environment Id
+          type: string
         error_message:
-          anyOf:
-          - minLength: 1
-            type: string
-          - type: 'null'
           description: If present - error loading context
+          minLength: 1
           title: Error Message
+          type: string
         initialized:
           description: blueapi context initialized
           title: Initialized
           type: boolean
       required:
+      - environment_id
       - initialized
       title: EnvironmentResponse
       type: object
@@ -61,26 +66,82 @@ components:
           type: array
       title: HTTPValidationError
       type: object
+    Health:
+      enum:
+      - ok
+      title: Health
+      type: string
+    HealthProbeResponse:
+      additionalProperties: false
+      properties:
+        status:
+          $ref: '#/components/schemas/Health'
+      required:
+      - status
+      title: HealthProbeResponse
+      type: object
+    OIDCConfig:
+      additionalProperties: false
+      properties:
+        client_audience:
+          default: blueapi
+          description: Client Audience(s)
+          title: Client Audience
+          type: string
+        client_id:
+          description: Client ID
+          title: Client Id
+          type: string
+        well_known_url:
+          description: URL to fetch OIDC config from the provider
+          title: Well Known Url
+          type: string
+      required:
+      - well_known_url
+      - client_id
+      title: OIDCConfig
+      type: object
+    PackageInfo:
+      additionalProperties: false
+      properties:
+        is_dirty:
+          description: Does the package have uncommitted changes
+          title: Is Dirty
+          type: boolean
+        location:
+          description: Location of the package
+          title: Location
+          type: string
+        name:
+          description: Name of the package
+          title: Name
+          type: string
+        source:
+          $ref: '#/components/schemas/SourceInfo'
+          default: pypi
+          description: Source of the package
+        version:
+          description: Version of the package
+          title: Version
+          type: string
+      title: PackageInfo
+      type: object
     PlanModel:
       additionalProperties: false
       description: Representation of a plan
       properties:
         description:
-          anyOf:
-          - type: string
-          - type: 'null'
           description: Docstring of the plan
           title: Description
+          type: string
         name:
           description: Name of the plan
           title: Name
           type: string
         schema:
-          anyOf:
-          - type: object
-          - type: 'null'
           description: Schema of the plan's parameters
           title: Schema
+          type: object
       required:
       - name
       title: PlanModel
@@ -99,6 +160,45 @@ components:
       - plans
       title: PlanResponse
       type: object
+    ProtocolInfo:
+      additionalProperties: false
+      properties:
+        name:
+          title: Name
+          type: string
+        types:
+          default: []
+          items:
+            type: string
+          title: Types
+          type: array
+      required:
+      - name
+      title: ProtocolInfo
+      type: object
+    PythonEnvironmentResponse:
+      additionalProperties: false
+      description: State of the Python environment.
+      properties:
+        installed_packages:
+          description: List of installed packages
+          items:
+            $ref: '#/components/schemas/PackageInfo'
+          title: Installed Packages
+          type: array
+        scratch_enabled:
+          default: false
+          description: Scratch status
+          title: Scratch Enabled
+          type: boolean
+      title: PythonEnvironmentResponse
+      type: object
+    SourceInfo:
+      enum:
+      - pypi
+      - scratch
+      title: SourceInfo
+      type: string
     StateChangeRequest:
       additionalProperties: false
       description: Request to change the state of the worker.
@@ -111,11 +211,9 @@ components:
         new_state:
           $ref: '#/components/schemas/WorkerState'
         reason:
-          anyOf:
-          - type: string
-          - type: 'null'
           description: The reason for the current run to be aborted
           title: Reason
+          type: string
       required:
       - new_state
       title: StateChangeRequest
@@ -180,7 +278,6 @@ components:
           title: Is Pending
           type: boolean
         request_id:
-          default: ''
           title: Request Id
           type: string
         task:
@@ -234,20 +331,32 @@ components:
       description: Worker's active task ID, can be None
       properties:
         task_id:
-          anyOf:
-          - type: string
-          - type: 'null'
           description: The ID of the current task, None if the worker is idle
           title: Task Id
+          type: string
       required:
       - task_id
       title: WorkerTask
       type: object
 info:
   title: BlueAPI Control
-  version: 0.0.5
+  version: 0.0.10
 openapi: 3.1.0
 paths:
+  /config/oidc:
+    get:
+      description: Retrieve the OpenID Connect (OIDC) configuration for the server.
+      operationId: get_oidc_config_config_oidc_get
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OIDCConfig'
+          description: Successful Response
+        '204':
+          description: No Authentication configured
+      summary: Get Oidc Config
   /devices:
     get:
       description: Retrieve information about all available devices.
@@ -309,6 +418,18 @@ paths:
                 $ref: '#/components/schemas/EnvironmentResponse'
           description: Successful Response
       summary: Get Environment
+  /healthz:
+    get:
+      description: If able to serve this, server is live and ready for requests.
+      operationId: health_probe_healthz_get
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthProbeResponse'
+          description: Successful Response
+      summary: Health Probe
   /plans:
     get:
       description: Retrieve information about all available plans.
@@ -346,6 +467,45 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get Plan By Name
+  /python_environment:
+    get:
+      description: 'Retrieve the Python environment details.
+
+        This endpoint fetches information about the Python environment,
+
+        such as the installed packages and scratch packages.'
+      operationId: get_python_environment_python_environment_get
+      parameters:
+      - in: query
+        name: name
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+      - in: query
+        name: source
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/SourceInfo'
+          - type: 'null'
+          title: Source
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PythonEnvironmentResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Get Python Environment
   /tasks:
     get:
       description: 'Retrieve tasks based on their status.
@@ -357,10 +517,8 @@ paths:
         name: task_status
         required: false
         schema:
-          anyOf:
-          - type: string
-          - type: 'null'
           title: Task Status
+          type: string
       responses:
         '200':
           content:
@@ -492,10 +650,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/WorkerState'
           description: Successful Response
-          detail: Transition requested
         '400':
           description: Bad Request
-          detail: Transition not allowed
         '422':
           content:
             application/json:
@@ -535,7 +691,6 @@ paths:
           description: Successful Response
         '409':
           description: Conflict
-          worker: already active
         '422':
           content:
             application/json:

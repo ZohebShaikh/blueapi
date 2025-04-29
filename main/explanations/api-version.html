@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Installation &#8212; blueapi 0.1.dev373+gecefb57 documentation</title>
+    <title>API Version &#8212; blueapi 0.1.dev373+gecefb57 documentation</title>
   
   
   
@@ -47,7 +47,7 @@
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=30646c52"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/installation';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'explanations/api-version';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://DiamondLightSource.github.io/blueapi/switcher.json';
@@ -58,8 +58,8 @@
     <link rel="icon" href="../_static/blueapi-logo.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Quickstart guide" href="quickstart.html" />
-    <link rel="prev" title="Tutorials" href="../tutorials.html" />
+    <link rel="next" title="Architecture" href="architecture.html" />
+    <link rel="prev" title="Explanations" href="../explanations.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="main" />
@@ -146,7 +146,7 @@
 <nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../tutorials.html">
     Tutorials
   </a>
@@ -160,7 +160,7 @@
 </li>
 
 
-<li class="nav-item ">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../explanations.html">
     Explanations
   </a>
@@ -294,7 +294,7 @@
 <nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../tutorials.html">
     Tutorials
   </a>
@@ -308,7 +308,7 @@
 </li>
 
 
-<li class="nav-item ">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../explanations.html">
     Explanations
   </a>
@@ -397,11 +397,22 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="run-bus.html">Run with local message bus</a></li>
-<li class="toctree-l1"><a class="reference internal" href="run-plan.html">Run a Plan</a></li>
-<li class="toctree-l1"><a class="reference internal" href="run-with-dev.html">Run/Debug in a Developer Environment</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">API Version</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="decisions.html">Architectural Decision Records</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="decisions/0001-record-architecture-decisions.html">1. Record architecture decisions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="decisions/0002-switched-to-python-copier-template.html">2. Adopt python-copier-template for project structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="decisions/0003-no-queues.html">3. No Queues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="decisions/0004-api-case.html">4. API Model Case</a></li>
+<li class="toctree-l2"><a class="reference internal" href="decisions/0005-connect-devices.html">5. Connect all dodal devices during startup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="decisions/0006-conventional-commits.html">3. Short descriptive title</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="events.html">Events Emitted by the Worker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extension-code.html">Home of Plans and Devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lifecycle.html">Lifecycle of a Plan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="type_validators.html">Type Validators</a></li>
 </ul>
 </div>
 </nav></div>
@@ -443,9 +454,9 @@
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="../tutorials.html" class="nav-link">Tutorials</a></li>
+    <li class="breadcrumb-item"><a href="../explanations.html" class="nav-link">Explanations</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Installation</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">API Version</span></li>
   </ul>
 </nav>
 </div>
@@ -462,42 +473,10 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="installation">
-<h1>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h1>
-<section id="check-your-version-of-python">
-<h2>Check your version of python<a class="headerlink" href="#check-your-version-of-python" title="Link to this heading">#</a></h2>
-<p>You will need python 3.10 or later. You can check your version of python by
-typing into a terminal:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">--</span><span class="n">version</span>
-</pre></div>
-</div>
-</section>
-<section id="create-a-virtual-environment">
-<h2>Create a virtual environment<a class="headerlink" href="#create-a-virtual-environment" title="Link to this heading">#</a></h2>
-<p>It is recommended that you install into a “virtual environment” so this
-installation will not interfere with any existing Python software:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">venv</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">venv</span>
-<span class="n">source</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">venv</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
-</pre></div>
-</div>
-</section>
-<section id="installing-the-library">
-<h2>Installing the library<a class="headerlink" href="#installing-the-library" title="Link to this heading">#</a></h2>
-<p>You can now use <code class="docutils literal notranslate"><span class="pre">pip</span></code> to install the library and its dependencies:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">blueapi</span>
-</pre></div>
-</div>
-<p>If you require a feature that is not currently released you can also install
-from GitHub:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">git</span><span class="o">+</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">DiamondLightSource</span><span class="o">/</span><span class="n">blueapi</span><span class="o">.</span><span class="n">git</span>
-</pre></div>
-</div>
-<p>The library should now be installed and the commandline interface on your path.
-You can check the version that has been installed by typing:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blueapi</span> <span class="o">--</span><span class="n">version</span>
-</pre></div>
-</div>
-</section>
+  <section id="api-version">
+<h1>API Version<a class="headerlink" href="#api-version" title="Link to this heading">#</a></h1>
+<p>Blueapi has <a class="reference external" href="https://github.com/DiamondLightSource/blueapi/releases">released versions</a> that are complaint with <a class="reference external" href="https://semver.org/">semantic versioning</a> to make updating/rolling back as easy as possible. Blueapi’s <a class="reference internal" href="../reference/rest-spec.html"><span class="std std-doc">REST API</span></a> is versioned separately to the main application, since not all changes will affect it. The idea is that a change in the REST API version is a signal to client developers that they may need to do some work to update.</p>
+<p>If you are a developer contributing a PR, there is a unit test that will fail if the REST API has changed in your PR but the version defined in the code, <a class="reference internal" href="../_api.html#blueapi.service.main.REST_API_VERSION" title="blueapi.service.main.REST_API_VERSION"><code class="xref myst py py-data docutils literal notranslate"><span class="pre">REST_API_VERSION</span></code></a>, has not been updated. You should update the version for <em>any</em> change to the API at all, whether it’s a major, minor or patch update is to be determined by the developer(s) and the reviewer(s) involved. <em>Do not</em> update <a class="reference download internal" download="" href="../_downloads/feddf4863798c05cc977abbc19543fe0/openapi.yaml"><span class="xref download myst"><code class="docutils literal notranslate"><span class="pre">docs/reference/openapi.yaml</span></code></span></a>, it is checked against <code class="docutils literal notranslate"><span class="pre">main</span></code> in CI.</p>
 </section>
 
 
@@ -511,20 +490,20 @@ You can check the version that has been installed by typing:</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../tutorials.html"
+       href="../explanations.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Tutorials</p>
+        <p class="prev-next-title">Explanations</p>
       </div>
     </a>
     <a class="right-next"
-       href="quickstart.html"
+       href="architecture.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Quickstart guide</p>
+        <p class="prev-next-title">Architecture</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -540,24 +519,10 @@ You can check the version that has been installed by typing:</p>
 
 
   <div class="sidebar-secondary-item">
-<div
-    id="pst-page-navigation-heading-2"
-    class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-  </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#check-your-version-of-python">Check your version of python</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-a-virtual-environment">Create a virtual environment</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-the-library">Installing the library</a></li>
-</ul>
-  </nav></div>
-
-  <div class="sidebar-secondary-item">
 
   
   <div class="tocsection editthispage">
-    <a href="https://github.com/DiamondLightSource/blueapi/edit/main/docs/tutorials/installation.md">
+    <a href="https://github.com/DiamondLightSource/blueapi/edit/main/docs/explanations/api-version.md">
       <i class="fa-solid fa-pencil"></i>
       
       
@@ -573,7 +538,7 @@ You can check the version that has been installed by typing:</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/tutorials/installation.md.txt"
+      <li><a href="../_sources/explanations/api-version.md.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div></div>
