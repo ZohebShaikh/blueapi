@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Command-Line Interface &#8212; blueapi 0.1.dev373+gecefb57 documentation</title>
+    <title>Command-Line Interface &#8212; blueapi 0.0.2.dev80+g2014eb5 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=c083ef26"></script>
+    <script src="../_static/documentation_options.js?v=b4d8fca2"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -466,6 +466,12 @@
   <section id="command-line-interface">
 <h1>Command-Line Interface<a class="headerlink" href="#command-line-interface" title="Link to this heading">#</a></h1>
 <p>Full reference for the CLI:</p>
+<p>Options for each command can also be set via environment variables to avoid them
+having to be set for every call. The variable to set should be <code class="docutils literal notranslate"><span class="pre">BLUEAPI</span></code>
+followed by the name of each subcommand, and then the name of the option all
+made upper-case and joined with underscores. For example, to set the <code class="docutils literal notranslate"><span class="pre">--output</span></code>
+option to the <code class="docutils literal notranslate"><span class="pre">controller</span></code> subcommand to ‘full’, you would need to set the
+environment variable <code class="docutils literal notranslate"><span class="pre">BLUEAPI_CONTROLLER_OUTPUT=full</span></code>.</p>
 <section id="blueapi">
 <h2>blueapi<a class="headerlink" href="#blueapi" title="Link to this heading">#</a></h2>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>blueapi<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>COMMAND<span class="w"> </span><span class="o">[</span>ARGS<span class="o">]</span>...
@@ -606,9 +612,22 @@ with optional reason</p>
 </div>
 <p class="rubric">Options</p>
 <dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-blueapi-controller-run-foreground">
+<span id="cmdoption-blueapi-controller-run-fg"></span><span id="cmdoption-blueapi-controller-run-background"></span><span id="cmdoption-blueapi-controller-run-bg"></span><span class="sig-name descname"><span class="pre">--foreground</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--fg</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--background</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--bg</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-blueapi-controller-run-foreground" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-blueapi-controller-run-t">
 <span id="cmdoption-blueapi-controller-run-timeout"></span><span class="sig-name descname"><span class="pre">-t</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--timeout</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;timeout&gt;</span></span><a class="headerlink" href="#cmdoption-blueapi-controller-run-t" title="Link to this definition">#</a></dt>
 <dd><p>Timeout for the plan in seconds. None hangs forever</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-blueapi-controller-run-i">
+<span id="cmdoption-blueapi-controller-run-instrument-session"></span><span class="sig-name descname"><span class="pre">-i</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--instrument-session</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;instrument_session&gt;</span></span><a class="headerlink" href="#cmdoption-blueapi-controller-run-i" title="Link to this definition">#</a></dt>
+<dd><p><strong>Required</strong> Instrument session associated with running the plan,
+used to tell blueapi where to store any data and as a security check:
+the session must be valid and active and you must be a member of it.</p>
 </dd></dl>
 
 <p class="rubric">Arguments</p>
