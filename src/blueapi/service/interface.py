@@ -148,7 +148,7 @@ def submit_task(task_request: TaskRequest) -> str:
         "instrument_session": task_request.instrument_session,
     }
     if context().tiled_client:
-        metadata["tiled_access_tags"] = task_request.instrument_session
+        metadata["tiled_access_tags"] = [task_request.instrument_session]
     task = Task(
         name=task_request.name,
         params=task_request.params,
