@@ -1,5 +1,6 @@
 import uuid
 from dataclasses import dataclass
+from typing import Any
 from unittest.mock import ANY, MagicMock, Mock, patch
 
 import pytest
@@ -331,12 +332,12 @@ def test_get_task_by_id(context_mock: MagicMock, tiled_enabled: bool):
         )
     )
 
-    expected_metadata = {
+    expected_metadata: dict[str, Any] = {
         "instrument_session": FAKE_INSTRUMENT_SESSION,
     }
 
     if tiled_enabled:
-        expected_metadata["tiled_access_tags"] = FAKE_INSTRUMENT_SESSION
+        expected_metadata["tiled_access_tags"] = [FAKE_INSTRUMENT_SESSION]
 
     assert interface.get_task_by_id(task_id) == TrackableTask.model_construct(
         task_id=task_id,
