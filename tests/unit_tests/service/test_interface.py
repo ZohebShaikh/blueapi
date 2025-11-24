@@ -315,10 +315,13 @@ def test_get_tasks(get_tasks_mock: MagicMock):
     assert interface.get_tasks() == tasks
 
 
+@pytest.mark.parametrize("tiled_enabled", [True, False])
 @patch("blueapi.service.interface.context")
-def test_get_task_by_id(context_mock: MagicMock):
+def test_get_task_by_id(context_mock: MagicMock, tiled_enabled: bool):
     context = BlueskyContext()
     context.register_plan(my_plan)
+    if tiled_enabled:
+        context.tiled_client = MagicMock()
     context_mock.return_value = context
 
     task_id = interface.submit_task(
@@ -328,15 +331,20 @@ def test_get_task_by_id(context_mock: MagicMock):
         )
     )
 
+    expected_metadata = {
+        "instrument_session": FAKE_INSTRUMENT_SESSION,
+    }
+
+    if tiled_enabled:
+        expected_metadata["tiled_access_tags"] = FAKE_INSTRUMENT_SESSION
+
     assert interface.get_task_by_id(task_id) == TrackableTask.model_construct(
         task_id=task_id,
         request_id=ANY,
         task=Task(
             name="my_plan",
             params={},
-            metadata={
-                "instrument_session": FAKE_INSTRUMENT_SESSION,
-            },
+            metadata=expected_metadata,
         ),
         is_complete=False,
         is_pending=True,

@@ -144,13 +144,15 @@ def get_device(name: str) -> DeviceModel:
 
 def submit_task(task_request: TaskRequest) -> str:
     """Submit a task to be run on begin_task"""
+    metadata = {
+        "instrument_session": task_request.instrument_session,
+    }
+    if context().tiled_client:
+        metadata["tiled_access_tags"] = task_request.instrument_session
     task = Task(
         name=task_request.name,
         params=task_request.params,
-        metadata={
-            "instrument_session": task_request.instrument_session,
-            "tiled_access_tags": [task_request.instrument_session],
-        },
+        metadata=metadata,
     )
     return worker().submit_task(task)
 
