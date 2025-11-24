@@ -22,9 +22,8 @@ from blueapi.config import (
     MetadataConfig,
     NumtrackerConfig,
     OIDCConfig,
+    PlanSource,
     ScratchConfig,
-    Source,
-    SourceKind,
     StompConfig,
 )
 from blueapi.core.context import BlueskyContext
@@ -513,8 +512,7 @@ def test_setup_with_numtracker_raises_if_provider_is_defined_in_device_module():
     conf = ApplicationConfig(
         env=EnvironmentConfig(
             sources=[
-                Source(
-                    kind=SourceKind.DEVICE_FUNCTIONS,
+                PlanSource(
                     module="tests.unit_tests.service.example_beamline_with_path_provider",
                 ),
             ],
