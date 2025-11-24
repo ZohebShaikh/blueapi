@@ -19,24 +19,40 @@ services:
         target: /etc/rabbitmq/enabled_plugins
 
   tiled:
-    image: ghcr.io/bluesky/tiled:0.2.0
+    image: ghcr.io/zohebshaikh/tiled:0.3.1
     ports:
       - "8407:8000"
     environment:
       - TILED_SINGLE_USER_API_KEY=${TILED_SINGLE_USER_API_KEY}
     volumes:
       - ./services/tiled_config:/deploy/config
+    depends_on:
+      keycloak:
+        condition: service_healthy
 
   keycloak:
-    image: docker.io/keycloak:26.4
+    image: keycloak/keycloak:26.4
     environment:
       - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
       - KC_BOOTSTRAP_ADMIN_USERNAME=admin
-    command: ["start-dev", "--import-realm"]
+      - KC_HEALTH_ENABLED=true
+      - KC_METRICS_ENABLED=true
+    command: ["start-dev"]
+    post_start:
+      - command: /tmp/startup.sh
     volumes:
-      - ./services/keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json
+      - type: bind
+        source: ./services/keycloak/startup.sh
+        target: /tmp/startup.sh
     ports:
-      - 8080:8080
+      - 8090:8080
+      - 9000:9000
+    healthcheck:
+      test: "curl --head -fsS http://localhost:9000/health/ready"
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 12s
 
   opa:
     network_mode: host
@@ -44,18 +60,15 @@ services:
     ports:
       - 8181:8181
     environment:
-      - ISSUER=http://localhost:8080/realms/master
+      - ISSUER=http://localhost:8090/realms/master
     command: [
-        run
-        --server
-        --addr
-        0.0.0.0:8181
-        --config-file
-        /etc/opa-config/config.yaml,
+        "run",
+        "--server",
+        "--addr",
+        "0.0.0.0:8181",
+        "--config-file",
+        "/etc/opa-config/config.yaml",
       ]
-    depends_on:
-      keycloak:
-        condition: service_healthy
     volumes:
       - type: bind
         source: ./services/opa-config
