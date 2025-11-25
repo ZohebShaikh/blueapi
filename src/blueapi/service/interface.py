@@ -19,6 +19,7 @@ from blueapi.service.model import (
     TaskRequest,
     WorkerTask,
 )
+from blueapi.utils.serialization import access_blob
 from blueapi.worker.event import TaskStatusEnum, WorkerEvent, WorkerState
 from blueapi.worker.task import Task
 from blueapi.worker.task_worker import TaskWorker, TrackableTask
@@ -148,7 +149,7 @@ def submit_task(task_request: TaskRequest) -> str:
         "instrument_session": task_request.instrument_session,
     }
     if context().tiled_client:
-        metadata["tiled_access_tags"] = [task_request.instrument_session]
+        metadata["tiled_access_tags"] = [access_blob(task_request.instrument_session)]
     task = Task(
         name=task_request.name,
         params=task_request.params,
