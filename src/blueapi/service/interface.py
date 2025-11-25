@@ -188,7 +188,9 @@ def begin_task(
 
     if tiled_config := context().tiled_conf:
         tiled_client = from_uri(
-            tiled_config.url, api_key=tiled_config.api_key, headers=pass_through_headers
+            str(tiled_config.url),
+            api_key=tiled_config.api_key,
+            headers=pass_through_headers,
         )
         tiled_writer_token = context().run_engine.subscribe(
             TiledWriter(tiled_client, batch_size=1)
