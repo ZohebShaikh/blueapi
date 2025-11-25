@@ -3,8 +3,10 @@ from functools import cache
 from queue import Full
 from typing import Any
 
+from bluesky.callbacks.tiled_writer import TiledWriter
 from bluesky_stomp.messaging import StompClient
 from bluesky_stomp.models import Broker, DestinationBase, MessageTopic
+from tiled.client import from_uri
 
 from blueapi.cli.scratch import get_python_environment
 from blueapi.config import ApplicationConfig, OIDCConfig, StompConfig
@@ -148,7 +150,7 @@ def submit_task(task_request: TaskRequest) -> str:
     metadata: dict[str, Any] = {
         "instrument_session": task_request.instrument_session,
     }
-    if context().tiled_client:
+    if context().tiled_conf is not None:
         metadata["tiled_access_tags"] = [access_blob(task_request.instrument_session)]
     task = Task(
         name=task_request.name,
@@ -183,10 +185,16 @@ def begin_task(
                 nt.set_headers({})
 
         worker().worker_events.subscribe(unset_headers_when_task_finished)
-    if tiled_client := context().tiled_client:
-        tiled_client.context.http_client.headers.update(pass_through_headers or {})
 
-        def unset_headers_when_task_finished(
+    if tiled_config := context().tiled_conf:
+        tiled_client = from_uri(
+            tiled_config.url, api_key=tiled_config.api_key, headers=pass_through_headers
+        )
+        tiled_writer_token = context().run_engine.subscribe(
+            TiledWriter(tiled_client, batch_size=1)
+        )
+
+        def remove_callback_when_task_finished(
             event: WorkerEvent, correlation_id: str | None
         ) -> None:
             if (
@@ -194,10 +202,9 @@ def begin_task(
                 and event.task_status.task_id == task.task_id
                 and event.task_status.task_complete
             ):
-                for header in pass_through_headers or {}:
-                    del tiled_client.context.http_client.headers[header]
+                context().run_engine.unsubscribe(tiled_writer_token)
 
-        worker().worker_events.subscribe(unset_headers_when_task_finished)
+        worker().worker_events.subscribe(remove_callback_when_task_finished)
 
     if task.task_id is not None:
         worker().begin_task(task.task_id)
