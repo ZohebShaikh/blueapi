@@ -151,7 +151,12 @@ def submit_task(task_request: TaskRequest) -> str:
         "instrument_session": task_request.instrument_session,
     }
     if context().tiled_conf is not None:
-        metadata["tiled_access_tags"] = [access_blob(task_request.instrument_session)]
+        md = config().env.metadata
+        # We raise an InvalidConfigError if this isn't set
+        assert md
+        metadata["tiled_access_tags"] = [
+            access_blob(task_request.instrument_session, md.instrument)
+        ]
     task = Task(
         name=task_request.name,
         params=task_request.params,
