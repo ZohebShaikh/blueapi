@@ -35,8 +35,8 @@ def access_blob(instrument_session: str, beamline: str) -> str:
     m = re.search(_INSTRUMENT_SESSION_AUTHZ_REGEX, instrument_session)
     if m is None:
         raise ValueError(
-            f"Unable to extract proposal and visit from \
-                instrument session {instrument_session}"
+            "Unable to extract proposal and visit from "
+            f"instrument session {instrument_session}"
         )
     blob = {"proposal": int(m.group(1)), "visit": int(m.group(2)), "beamline": beamline}
     return json.dumps(blob)

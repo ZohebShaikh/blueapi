@@ -1,3 +1,4 @@
+import json
 import uuid
 from dataclasses import dataclass
 from typing import Any
@@ -318,11 +319,17 @@ def test_get_tasks(get_tasks_mock: MagicMock):
 
 @pytest.mark.parametrize("tiled_enabled", [True, False])
 @patch("blueapi.service.interface.context")
-def test_get_task_by_id(context_mock: MagicMock, tiled_enabled: bool):
+@patch("blueapi.service.interface.config")
+def test_get_task_by_id(
+    config_mock: MagicMock, context_mock: MagicMock, tiled_enabled: bool
+):
     context = BlueskyContext()
     context.register_plan(my_plan)
     if tiled_enabled:
-        context.tiled_client = MagicMock()
+        context.tiled_conf = MagicMock()
+        config_mock.return_value = ApplicationConfig(
+            env=EnvironmentConfig(metadata=MetadataConfig(instrument="ixx"))
+        )
     context_mock.return_value = context
 
     task_id = interface.submit_task(
@@ -337,7 +344,8 @@ def test_get_task_by_id(context_mock: MagicMock, tiled_enabled: bool):
     }
 
     if tiled_enabled:
-        expected_metadata["tiled_access_tags"] = [FAKE_INSTRUMENT_SESSION]
+        expected_access_tag = {"proposal": 12345, "visit": 1, "beamline": "ixx"}
+        expected_metadata["tiled_access_tags"] = [json.dumps(expected_access_tag)]
 
     assert interface.get_task_by_id(task_id) == TrackableTask.model_construct(
         task_id=task_id,
