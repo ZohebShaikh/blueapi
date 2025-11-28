@@ -174,7 +174,8 @@ def begin_task(
     task: WorkerTask, pass_through_headers: Mapping[str, str] | None = None
 ) -> WorkerTask:
     """Trigger a task. Will fail if the worker is busy"""
-    if worker().get_active_task() is not None:
+    active_task = worker().get_active_task()
+    if active_task is not None and not active_task.is_complete:
         raise Full()
     if nt := context().numtracker:
         nt.set_headers(pass_through_headers or {})
