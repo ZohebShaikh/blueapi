@@ -38,5 +38,6 @@ def access_blob(instrument_session: str, beamline: str) -> str:
             "Unable to extract proposal and visit from "
             f"instrument session {instrument_session}"
         )
-    blob = {"proposal": int(m.group(1)), "visit": int(m.group(2)), "beamline": beamline}
+    # "\"proposal_number\": %d, \"visit_number\": %d, \"beamline\": %s"
+    blob = {"proposal_number": int(m.group(1)), "visit_number": int(m.group(2)), "beamline": beamline}
     return json.dumps(blob)
