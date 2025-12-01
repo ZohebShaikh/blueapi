@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>API Version &#8212; blueapi 0.0.2.dev174+gd8a989cc6 documentation</title>
+    <title>Enable Persistent Volumes &#8212; blueapi 0.0.2.dev174+gd8a989cc6 documentation</title>
   
   
   
@@ -47,7 +47,7 @@
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=30646c52"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'explanations/api-version';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'how-to/use-persistent-volumes';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://DiamondLightSource.github.io/blueapi/switcher.json';
@@ -58,8 +58,8 @@
     <link rel="icon" href="../_static/blueapi-logo.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Architecture" href="architecture.html" />
-    <link rel="prev" title="Explanations" href="../explanations.html" />
+    <link rel="next" title="Write Devices for Blueapi" href="write-devices.html" />
+    <link rel="prev" title="Run in a Container" href="run-container.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="main" />
@@ -153,14 +153,14 @@
 </li>
 
 
-<li class="nav-item ">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../how-to.html">
     How-to Guides
   </a>
 </li>
 
 
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../explanations.html">
     Explanations
   </a>
@@ -301,14 +301,14 @@
 </li>
 
 
-<li class="nav-item ">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../how-to.html">
     How-to Guides
   </a>
 </li>
 
 
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../explanations.html">
     Explanations
   </a>
@@ -397,22 +397,23 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">API Version</a></li>
-<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="decisions.html">Architectural Decision Records</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="decisions/0001-record-architecture-decisions.html">1. Record architecture decisions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="decisions/0002-switched-to-python-copier-template.html">2. Adopt python-copier-template for project structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="decisions/0003-no-queues.html">3. No Queues</a></li>
-<li class="toctree-l2"><a class="reference internal" href="decisions/0004-api-case.html">4. API Model Case</a></li>
-<li class="toctree-l2"><a class="reference internal" href="decisions/0005-connect-devices.html">5. Connect all dodal devices during startup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="decisions/0006-conventional-commits.html">3. Short descriptive title</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1"><a class="reference internal" href="events.html">Events Emitted by the Worker</a></li>
-<li class="toctree-l1"><a class="reference internal" href="extension-code.html">Home of Plans and Devices</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lifecycle.html">Lifecycle of a Plan</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plans.html">Plans</a></li>
-<li class="toctree-l1"><a class="reference internal" href="type_validators.html">Type Validators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="add-plans-and-devices.html">Add Plans and Devices to your Blueapi Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authenticate.html">Authenticate to BlueAPI-Cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configure-app.html">Configure the Application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configure-logging.html">Configure Logging</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="contribute.html">Contribute to the project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="edit-live.html">Edit Plans and Device Live</a></li>
+<li class="toctree-l1"><a class="reference internal" href="integrate-with-numtracker.html">Integrate With Numtracker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run-cli.html">Control the Worker via the CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run-container.html">Run in a Container</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Enable Persistent Volumes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="write-devices.html">Write Devices for Blueapi</a></li>
+<li class="toctree-l1"><a class="reference internal" href="write-plans.html">Write Bluesky Plans for Blueapi</a></li>
 </ul>
 </div>
 </nav></div>
@@ -454,9 +455,9 @@
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="../explanations.html" class="nav-link">Explanations</a></li>
+    <li class="breadcrumb-item"><a href="../how-to.html" class="nav-link">How-to Guides</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">API Version</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Enable Persistent Volumes</span></li>
   </ul>
 </nav>
 </div>
@@ -473,10 +474,38 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="api-version">
-<h1>API Version<a class="headerlink" href="#api-version" title="Link to this heading">#</a></h1>
-<p>Blueapi has <a class="reference external" href="https://github.com/DiamondLightSource/blueapi/releases">released versions</a> that are complaint with <a class="reference external" href="https://semver.org/">semantic versioning</a> to make updating/rolling back as easy as possible. Blueapi’s <a class="reference internal" href="../reference/rest-spec.html"><span class="std std-doc">REST API</span></a> is versioned separately to the main application, since not all changes will affect it. The idea is that a change in the REST API version is a signal to client developers that they may need to do some work to update.</p>
-<p>If you are a developer contributing a PR, there is a unit test that will fail if the REST API has changed in your PR but the version defined in the code, <a class="reference internal" href="../_api.html#blueapi.service.main.REST_API_VERSION" title="blueapi.service.main.REST_API_VERSION"><code class="xref myst py py-data docutils literal notranslate"><span class="pre">REST_API_VERSION</span></code></a>, has not been updated. You should update the version for <em>any</em> change to the API at all, whether it’s a major, minor or patch update is to be determined by the developer(s) and the reviewer(s) involved. <em>Do not</em> update <a class="reference download internal" download="" href="../_downloads/feddf4863798c05cc977abbc19543fe0/openapi.yaml"><span class="xref download myst"><code class="docutils literal notranslate"><span class="pre">docs/reference/openapi.yaml</span></code></span></a>, it is checked against <code class="docutils literal notranslate"><span class="pre">main</span></code> in CI.</p>
+  <section id="enable-persistent-volumes">
+<h1>Enable Persistent Volumes<a class="headerlink" href="#enable-persistent-volumes" title="Link to this heading">#</a></h1>
+<p>BlueAPI can use persistent volumes as a scratch area. This allows the user to retain different environments for different versions of BlueAPI, and to avoid problems related to the shared file system such as permission issues.</p>
+<section id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">#</a></h2>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="configure-app.html"><span class="std std-doc">Configure the Application</span></a></p>
+</div>
+<p>The relevant configuration is below:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># -- Configure the initContainer that checks out the scratch configuration repositories</span>
+<span class="nt">initContainer</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">persistentVolume</span><span class="p">:</span>
+<span class="w">    </span><span class="c1"># -- Whether to use a persistent volume in the cluster or check out onto the mounted host filesystem</span>
+<span class="w">    </span><span class="c1"># If persistentVolume.enabled: False, mounts scratch.root as scratch.root in the container</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">    </span><span class="c1"># -- May be set to an existing persistent volume claim to re-use the volume, else a new one is created for each blueapi release</span>
+<span class="w">    </span><span class="nt">existingClaimName</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+</pre></div>
+</div>
+<p>With both <code class="docutils literal notranslate"><span class="pre">initContainer.enabled</span></code> and <code class="docutils literal notranslate"><span class="pre">initContainer.persistentVolume.enabled</span></code> to <code class="docutils literal notranslate"><span class="pre">true</span></code>, BlueAPI will create or attempt to bind to an existing Persistent Volume Claim, which when fulfilled will be used as a scratch area.</p>
+</section>
+<section id="reusing-persistent-volume-claims">
+<h2>Reusing Persistent Volume Claims<a class="headerlink" href="#reusing-persistent-volume-claims" title="Link to this heading">#</a></h2>
+<p>BlueAPI can reuse existing PVCs by setting <code class="docutils literal notranslate"><span class="pre">initContainer.persistentVolume.existingClaimName</span></code>. When this is not set it defaults to <code class="docutils literal notranslate"><span class="pre">scratch-&lt;blueapi-version&gt;</span></code>. meaning the same Persistent Volume is reused when installing the same version of BlueAPI in a given namespace.</p>
+<p>This can be set to any value to create and reuse arbitrarily named PVs.</p>
+</section>
+<section id="directly-editing-persistent-volumes">
+<h2>Directly Editing Persistent Volumes<a class="headerlink" href="#directly-editing-persistent-volumes" title="Link to this heading">#</a></h2>
+<p>The easiest way to interact with the created persistent volume is via the Kubernetes plugin for VSCode. <a class="reference external" href="https://diamondlightsource.github.io/python-copier-template/main/how-to/debug-in-cluster.html#debugging-in-the-cluster">This is documented here.</a></p>
+</section>
 </section>
 
 
@@ -490,20 +519,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../explanations.html"
+       href="run-container.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Explanations</p>
+        <p class="prev-next-title">Run in a Container</p>
       </div>
     </a>
     <a class="right-next"
-       href="architecture.html"
+       href="write-devices.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Architecture</p>
+        <p class="prev-next-title">Write Devices for Blueapi</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -519,10 +548,24 @@
 
 
   <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration">Configuration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reusing-persistent-volume-claims">Reusing Persistent Volume Claims</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#directly-editing-persistent-volumes">Directly Editing Persistent Volumes</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
 
   
   <div class="tocsection editthispage">
-    <a href="https://github.com/DiamondLightSource/blueapi/edit/main/docs/explanations/api-version.md">
+    <a href="https://github.com/DiamondLightSource/blueapi/edit/main/docs/how-to/use-persistent-volumes.md">
       <i class="fa-solid fa-pencil"></i>
       
       
@@ -538,7 +581,7 @@
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/explanations/api-version.md.txt"
+      <li><a href="../_sources/how-to/use-persistent-volumes.md.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div></div>

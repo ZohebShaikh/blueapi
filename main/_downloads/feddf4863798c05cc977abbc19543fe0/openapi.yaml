@@ -92,6 +92,11 @@ components:
           description: Client ID
           title: Client Id
           type: string
+        logout_redirect_endpoint:
+          default: ''
+          description: The oidc endpoint required to logout
+          title: Logout Redirect Endpoint
+          type: string
         well_known_url:
           description: URL to fetch OIDC config from the provider
           title: Well Known Url
@@ -139,6 +144,7 @@ components:
           title: Name
           type: string
         schema:
+          additionalProperties: true
           description: Schema of the plan's parameters
           title: Schema
           type: object
@@ -218,6 +224,28 @@ components:
       - new_state
       title: StateChangeRequest
       type: object
+    Task:
+      additionalProperties: false
+      description: Task that will run a plan
+      properties:
+        metadata:
+          additionalProperties: true
+          description: Any metadata to apply to all runs within this task
+          title: Metadata
+          type: object
+        name:
+          description: Name of plan to run
+          title: Name
+          type: string
+        params:
+          additionalProperties: true
+          description: Values for parameters to plan, if any
+          title: Params
+          type: object
+      required:
+      - name
+      title: Task
+      type: object
     TaskRequest:
       additionalProperties: false
       description: Request to run a task with related info
@@ -231,6 +259,7 @@ components:
           title: Name
           type: string
         params:
+          additionalProperties: true
           description: Values for parameters to plan, if any
           title: Params
           type: object
@@ -286,7 +315,7 @@ components:
           title: Request Id
           type: string
         task:
-          title: Task
+          $ref: '#/components/schemas/Task'
         task_id:
           title: Task Id
           type: string
@@ -344,8 +373,11 @@ components:
       title: WorkerTask
       type: object
 info:
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
   title: BlueAPI Control
-  version: 0.1.1
+  version: 1.1.1
 openapi: 3.1.0
 paths:
   /config/oidc:
@@ -362,6 +394,8 @@ paths:
         '204':
           description: No Authentication configured
       summary: Get Oidc Config
+      tags:
+      - Meta
   /devices:
     get:
       description: Retrieve information about all available devices.
@@ -374,6 +408,8 @@ paths:
                 $ref: '#/components/schemas/DeviceResponse'
           description: Successful Response
       summary: Get Devices
+      tags:
+      - Device
   /devices/{name}:
     get:
       description: Retrieve information about a devices by its (unique) name.
@@ -399,6 +435,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get Device By Name
+      tags:
+      - Device
   /environment:
     delete:
       description: Delete the current environment, causing internal components to
@@ -412,6 +450,8 @@ paths:
                 $ref: '#/components/schemas/EnvironmentResponse'
           description: Successful Response
       summary: Delete Environment
+      tags:
+      - Environment
     get:
       description: Get the current state of the environment, i.e. initialization state.
       operationId: get_environment_environment_get
@@ -423,6 +463,8 @@ paths:
                 $ref: '#/components/schemas/EnvironmentResponse'
           description: Successful Response
       summary: Get Environment
+      tags:
+      - Environment
   /healthz:
     get:
       description: If able to serve this, server is live and ready for requests.
@@ -435,6 +477,8 @@ paths:
                 $ref: '#/components/schemas/HealthProbeResponse'
           description: Successful Response
       summary: Health Probe
+      tags:
+      - Meta
   /plans:
     get:
       description: Retrieve information about all available plans.
@@ -447,6 +491,8 @@ paths:
                 $ref: '#/components/schemas/PlanResponse'
           description: Successful Response
       summary: Get Plans
+      tags:
+      - Plan
   /plans/{name}:
     get:
       description: Retrieve information about a plan by its (unique) name.
@@ -472,6 +518,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get Plan By Name
+      tags:
+      - Plan
   /python_environment:
     get:
       description: 'Retrieve the Python environment details.
@@ -511,6 +559,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get Python Environment
+      tags:
+      - Environment
   /tasks:
     get:
       description: 'Retrieve tasks based on their status.
@@ -538,6 +588,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get Tasks
+      tags:
+      - Task
     post:
       description: Submit a task to the worker.
       operationId: submit_task_tasks_post
@@ -567,6 +619,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Submit Task
+      tags:
+      - Task
   /tasks/{task_id}:
     delete:
       operationId: delete_submitted_task_tasks__task_id__delete
@@ -591,6 +645,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Delete Submitted Task
+      tags:
+      - Task
     get:
       description: Retrieve a task
       operationId: get_task_tasks__task_id__get
@@ -615,6 +671,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get Task
+      tags:
+      - Task
   /worker/state:
     get:
       description: Get the State of the Worker
@@ -627,6 +685,8 @@ paths:
                 $ref: '#/components/schemas/WorkerState'
           description: Successful Response
       summary: Get State
+      tags:
+      - Task
     put:
       description: "Request that the worker is put into a particular state.\nReturns\
         \ the state of the worker at the end of the call.\n\n- **The following transitions\
@@ -665,6 +725,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Set State
+      tags:
+      - Task
   /worker/task:
     get:
       operationId: get_active_task_worker_task_get
@@ -676,6 +738,8 @@ paths:
                 $ref: '#/components/schemas/WorkerTask'
           description: Successful Response
       summary: Get Active Task
+      tags:
+      - Task
     put:
       description: 'Set a task to active status, the worker should begin it as soon
         as possible.
@@ -704,3 +768,5 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Set Active Task
+      tags:
+      - Task
