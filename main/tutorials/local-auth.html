@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Edit Plans and Device Live &#8212; blueapi 0.1.dev624+g860d4e879 documentation</title>
+    <title>Run Auth Locally &#8212; blueapi 0.1.dev624+g860d4e879 documentation</title>
   
   
   
@@ -47,7 +47,7 @@
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=30646c52"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'how-to/edit-live';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/local-auth';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://DiamondLightSource.github.io/blueapi/switcher.json';
@@ -58,8 +58,8 @@
     <link rel="icon" href="../_static/blueapi-logo.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Integrate With Numtracker" href="integrate-with-numtracker.html" />
-    <link rel="prev" title="Contribute to the project" href="contribute.html" />
+    <link rel="next" title="Quickstart guide" href="quickstart.html" />
+    <link rel="prev" title="Installation" href="installation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="main" />
@@ -146,14 +146,14 @@
 <nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item ">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../tutorials.html">
     Tutorials
   </a>
 </li>
 
 
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../how-to.html">
     How-to Guides
   </a>
@@ -294,14 +294,14 @@
 <nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item ">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../tutorials.html">
     Tutorials
   </a>
 </li>
 
 
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../how-to.html">
     How-to Guides
   </a>
@@ -397,18 +397,13 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="add-plans-and-devices.html">Add Plans and Devices to your Blueapi Environment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="authenticate.html">Authenticate to BlueAPI-Cli</a></li>
-<li class="toctree-l1"><a class="reference internal" href="configure-app.html">Configure the Application</a></li>
-<li class="toctree-l1"><a class="reference internal" href="configure-logging.html">Configure Logging</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contribute.html">Contribute to the project</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Edit Plans and Device Live</a></li>
-<li class="toctree-l1"><a class="reference internal" href="integrate-with-numtracker.html">Integrate With Numtracker</a></li>
-<li class="toctree-l1"><a class="reference internal" href="run-cli.html">Control the Worker via the CLI</a></li>
-<li class="toctree-l1"><a class="reference internal" href="run-container.html">Run in a Container</a></li>
-<li class="toctree-l1"><a class="reference internal" href="use-persistent-volumes.html">Enable Persistent Volumes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="write-devices.html">Write Devices for Blueapi</a></li>
-<li class="toctree-l1"><a class="reference internal" href="write-plans.html">Write Bluesky Plans for Blueapi</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Run Auth Locally</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run-bus.html">Run with local message bus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run-plan.html">Run a Plan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run-with-dev.html">Run/Debug in a Developer Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scripting-plans.html">Scripting Plans</a></li>
 </ul>
 </div>
 </nav></div>
@@ -450,9 +445,9 @@
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="../how-to.html" class="nav-link">How-to Guides</a></li>
+    <li class="breadcrumb-item"><a href="../tutorials.html" class="nav-link">Tutorials</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Edit Plans and Device Live</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Run Auth Locally</span></li>
   </ul>
 </nav>
 </div>
@@ -469,78 +464,24 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="edit-plans-and-device-live">
-<h1>Edit Plans and Device Live<a class="headerlink" href="#edit-plans-and-device-live" title="Link to this heading">#</a></h1>
-<p>You may want to tweak/edit your plans and devices live, i.e. without having to make a new release of a Python module, <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code> it and restart blueapi. Blueapi can be configured to use a special directory called the “scratch area” where source code can be checked out and installed in <a class="reference external" href="https://setuptools.pypa.io/en/latest/userguide/development_mode.html">development mode</a>.</p>
-<section id="configuration">
-<h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">#</a></h2>
-<p>Blueapi can be configured to install editable Python packages from a chosen directory:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># my-scratch.yaml</span>
-
-<span class="nt">scratch</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/my/scratch/directory</span>
-<span class="w">  </span><span class="c1"># Required GID for the scratch area</span>
-<span class="w">  </span><span class="nt">required_gid</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">12345</span>
-<span class="w">  </span><span class="nt">repositories</span><span class="p">:</span>
-<span class="w">    </span><span class="c1"># Repository for DLS devices</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dodal</span>
-<span class="w">      </span><span class="nt">remote_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/DiamondLightSource/dodal.git</span>
-
-<span class="w">    </span><span class="c1"># Example repository full of custom plans for a particular science technique</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mx-bluesky</span>
-<span class="w">      </span><span class="nt">remote_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/DiamondLightSource/mx-bluesky.git</span>
-</pre></div>
-</div>
-<p>Note the <code class="docutils literal notranslate"><span class="pre">required_gid</span></code> field, which is useful for stopping blueapi from locking the files it clones
-to a particular owner.</p>
-</section>
-<section id="synchronization">
-<h2>Synchronization<a class="headerlink" href="#synchronization" title="Link to this heading">#</a></h2>
-<p>Blueapi will synchronize reality with the configuration if you run</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blueapi</span> <span class="o">-</span><span class="n">c</span> <span class="n">my</span><span class="o">-</span><span class="n">scratch</span><span class="o">.</span><span class="n">yaml</span> <span class="n">setup</span><span class="o">-</span><span class="n">scratch</span>
-</pre></div>
-</div>
-<p>The goal of synchronization is to make the scratch directory resemble the YAML specification without accidentally overwriting uncommited/unpushed changes that may already be there. For each specified repository, blueapi will clone it if it does not exist and otherwise ignore it. If it exists in a broken state, this can cause problems, and you may have to manually delete it from your scratch area.</p>
-</section>
-<section id="reloading">
-<h2>Reloading<a class="headerlink" href="#reloading" title="Link to this heading">#</a></h2>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>This will abort any running plan and delete and re-initialize all ophyd devices</p>
-</div>
-<p>If you add or remove packages from the scratch area, you will need to restart blueapi. However, if you edit code that is already checked out you can tell the server to perform a hot reload via</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blueapi</span> <span class="n">controller</span> <span class="n">env</span> <span class="o">-</span><span class="n">r</span>
-</pre></div>
-</div>
-</section>
-<section id="kubernetes">
-<h2>Kubernetes<a class="headerlink" href="#kubernetes" title="Link to this heading">#</a></h2>
-<p>The helm chart can be configured to mount a scratch area from the
-host machine, include the following in your <code class="docutils literal notranslate"><span class="pre">values.yaml</span></code>:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">worker</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">scratch</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/my/scratch/directory</span>
-<span class="w">    </span><span class="nt">required_gid</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">12345</span>
-<span class="w">    </span><span class="nt">repositories</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dodal</span>
-<span class="w">        </span><span class="nt">remote_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/DiamondLightSource/dodal.git</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mx-bluesky</span>
-<span class="w">        </span><span class="nt">remote_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/DiamondLightSource/mx-bluesky.git</span>
-
-<span class="nt">initContainer</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-</pre></div>
-</div>
-<p>When <code class="docutils literal notranslate"><span class="pre">initContainer</span></code> is enabled, it will iterate over the scratch configuration, cloning the specified repositories and setting the correct group ownership based on the <code class="docutils literal notranslate"><span class="pre">required_gid</span></code>. This ensures that the scratch area is properly initialized before the main container starts.</p>
-<p>If <code class="docutils literal notranslate"><span class="pre">initContainer</span></code> is not enabled, the main container will still attempt to load the scratch area as specified in the configuration. However, it will not perform any cloning or group setup, so the scratch area must already be prepared and correctly configured.</p>
-<p>The scratch folder that you’re pointing to must exist, not already have a copy of the repositories that will be cloned into it and have correct permissions e.g.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">/</span><span class="n">dls_sw</span><span class="o">/&lt;</span><span class="n">my_beamline</span><span class="o">&gt;/</span><span class="n">software</span><span class="o">/</span><span class="n">blueapi</span><span class="o">/</span>
-<span class="n">mkdir</span> <span class="n">scratch</span>
-<span class="n">chmod</span> <span class="n">o</span><span class="o">+</span><span class="n">wrX</span> <span class="o">-</span><span class="n">R</span> <span class="n">scratch</span>
-</pre></div>
-</div>
-<p>BlueAPI will then checkout the <code class="docutils literal notranslate"><span class="pre">main</span></code> branch of any specified repos into this scratch folder.</p>
-</section>
+  <section id="run-auth-locally">
+<h1>Run Auth Locally<a class="headerlink" href="#run-auth-locally" title="Link to this heading">#</a></h1>
+<p>BlueAPI can be secured using OIDC authenticaiton. For development it can be useful to run a containerised version of the OIDC stack, to serve a local instance of BlueAPI.</p>
+<p>To run the stack:</p>
+<ol class="arabic simple">
+<li><p>In the root directory run <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">submodule</span> <span class="pre">update</span> <span class="pre">--init</span> <span class="pre">--recursive</span></code> to initialise the example-services repo</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">-f</span> <span class="pre">tests/system_tests/compose.yaml</span> <span class="pre">up</span> <span class="pre">-d</span></code> to launch an instance of NumTracker, RabbitMQ, Keycloak, Tiled, OPA and a number of IOCs, in detached mode</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">tests/system_tests/.env</span></code> which will set required EPICS environmental variables</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">blueapi</span> <span class="pre">-c</span> <span class="pre">tests/system_tests/config.yaml</span> <span class="pre">serve</span></code> to launch BlueAPI configured to use the launched stack. This may take a while, as BlueAPI will attempt to connect to a number of devices via Channel Access</p></li>
+</ol>
+<p>To log in through the BlueAPI CLI:</p>
+<ol class="arabic simple">
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">blueapi</span> <span class="pre">login</span></code> (if you want to run a plan with stomp config, add the <code class="docutils literal notranslate"><span class="pre">-c</span> <span class="pre">tests/system_tests/config.yaml</span></code> parameter)</p></li>
+<li><p>Follow the login prompted to Keycloak, then log in with the username <code class="docutils literal notranslate"><span class="pre">admin</span></code> and password <code class="docutils literal notranslate"><span class="pre">admin</span></code></p></li>
+<li><p>When prompted by Keycloak, grant BlueAPI access to the listed privileges</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">blueapi</span> <span class="pre">controller</span> <span class="pre">plans</span></code> to check that the log in has succeeded</p></li>
+</ol>
+<p>By default the BlueAPI instance will be available via the OAuth2 proxy at <code class="docutils literal notranslate"><span class="pre">localhost:4180</span></code>, and Tiled through its OAuth2 proxy at <code class="docutils literal notranslate"><span class="pre">localhost:4181</span></code>.</p>
 </section>
 
 
@@ -554,20 +495,20 @@ host machine, include the following in your <code class="docutils literal notran
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="contribute.html"
+       href="installation.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Contribute to the project</p>
+        <p class="prev-next-title">Installation</p>
       </div>
     </a>
     <a class="right-next"
-       href="integrate-with-numtracker.html"
+       href="quickstart.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Integrate With Numtracker</p>
+        <p class="prev-next-title">Quickstart guide</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -583,25 +524,10 @@ host machine, include the following in your <code class="docutils literal notran
 
 
   <div class="sidebar-secondary-item">
-<div
-    id="pst-page-navigation-heading-2"
-    class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-  </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration">Configuration</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#synchronization">Synchronization</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reloading">Reloading</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kubernetes">Kubernetes</a></li>
-</ul>
-  </nav></div>
-
-  <div class="sidebar-secondary-item">
 
   
   <div class="tocsection editthispage">
-    <a href="https://github.com/DiamondLightSource/blueapi/edit/main/docs/how-to/edit-live.md">
+    <a href="https://github.com/DiamondLightSource/blueapi/edit/main/docs/tutorials/local-auth.md">
       <i class="fa-solid fa-pencil"></i>
       
       
@@ -617,7 +543,7 @@ host machine, include the following in your <code class="docutils literal notran
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/how-to/edit-live.md.txt"
+      <li><a href="../_sources/tutorials/local-auth.md.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div></div>
