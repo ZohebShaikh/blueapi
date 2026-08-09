@@ -50,18 +50,42 @@ services:
       - label=disable
 
   tiled:
-    image: ghcr.io/bluesky/tiled:0.2.15-b1
+    image: ghcr.io/zohebshaikh/diamond-tiled:0.0.1
     network_mode: host # Port 8407
     environment:
       - PYTHONPATH=/deploy/
+      - POSTGRES_PASSWORD=tiled_pg
     volumes:
-      - ./services/tiled_config:/deploy/config
+      - ./services/tiled_config/config.yml:/deploy/config/config_for_containerfile.yml
+      - ./services/tiled_config/tiled_data:/storage
     command: ["tiled", "serve", "config", "--host", "0.0.0.0", "--port", "8407"]
     depends_on:
       keycloak:
         condition: service_healthy
+      tiled-postgres:
+        condition: service_healthy
     security_opt:
       - label=disable
+
+  tiled-postgres:
+    image: docker.io/postgres:16
+    network_mode: host
+    environment:
+      - POSTGRES_USER=tiled
+      - POSTGRES_PASSWORD=tiled_pg
+      # We create two databases, 'tiled_catalog' (metadata) and
+      # 'tiled_storage' (tabular data) below. But it is required to
+      # specify one here, so we use 'postgres' as a neutral default.
+      - POSTGRES_DB=postgres
+    volumes:
+      - ./services/tiled_config/postgres_data:/var/lib/postgresql/data
+      - ./services/tiled_config/initdb:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: pg_isready -U tiled -d postgres
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   opa:
     image: openpolicyagent/opa:edge-static-debug
@@ -89,4 +113,3 @@ services:
         condition: service_healthy
     security_opt:
       - label=disable
-

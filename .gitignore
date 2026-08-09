@@ -71,3 +71,6 @@ lockfiles/
 
 # Editor/IDE project files
 .idea/
+
+tests/system_tests/tiled_config/postgres_data
+tests/system_tests/tiled_config/tiled_data

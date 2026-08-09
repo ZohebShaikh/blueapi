@@ -3,19 +3,20 @@ authentication:
     - provider: keycloak_oidc
       authenticator: tiled.authenticators:ProxiedOIDCAuthenticator
       args:
-        audience: account
+        audience: tiled
         client_id: tiled
         client_secret: tiled-secret
         device_flow_client_id: tiled-cli
         well_known_uri: "http://localhost:8081/realms/master/.well-known/openid-configuration"
         confirmation_message: "You have logged in with authn.diamond.ac.uk as {id}."
-        redirect_on_success: "http://localhost:8407/"
+        redirect_on_success: "http://localhost:8407/ui/auth-callback"
+        user_id_claim: fedid
 trees:
   - path: /
     tree: catalog
     args:
-      uri: "sqlite:////storage/catalog.db"
-      writable_storage: "sqlite:////storage/catalog.db"
+      uri: postgresql://tiled:${POSTGRES_PASSWORD}@localhost:5432/tiled_catalog
+      writable_storage: ["file:///storage", "postgresql://tiled:${POSTGRES_PASSWORD}@localhost:5432/tiled_storage"]
       init_if_not_exists: true
 
 access_control:
