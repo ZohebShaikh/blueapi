@@ -81,8 +81,8 @@ create_client "ixx-blueapi" "ixx-blueapi" "" "" \
 
 # Tiled
 create_client "tiled" "tiled" "" "" \
-    -s standardFlowEnabled=true -s secret="tiled-secret" -s rootUrl="http://localhost:4181" \
-    -s 'redirectUris=["http://localhost:4181/*"]'
+    -s standardFlowEnabled=true -s secret="tiled-secret" -s rootUrl="http://localhost:8407" \
+    -s 'redirectUris=["http://localhost:8407/*"]'
 
 # Tiled CLI
 create_client "tiled-cli" "tiled" "" ""\
