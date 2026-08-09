@@ -25,6 +25,7 @@
             "config": {
                 "introspection.token.claim": "true",
                 "access.token.claim": "true",
+                "id.token.claim": "true",
                 "included.custom.audience": "__AUDIENCE__"
             }
         }

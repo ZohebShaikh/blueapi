@@ -80,7 +80,7 @@ create_client "ixx-blueapi" "ixx-blueapi" "" "" \
     -s 'attributes={"frontchannel.logout.session.required":"true","use.refresh.tokens":"true"}'
 
 # Tiled
-create_client "tiled" "tiled" "" "" \
+create_client "tiled" "account" "" "" \
     -s standardFlowEnabled=true -s secret="tiled-secret" -s rootUrl="http://localhost:8407" \
     -s 'redirectUris=["http://localhost:8407/*"]'
 

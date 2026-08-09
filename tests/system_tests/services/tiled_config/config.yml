@@ -3,7 +3,7 @@ authentication:
     - provider: keycloak_oidc
       authenticator: tiled.authenticators:ProxiedOIDCAuthenticator
       args:
-        audience: tiled
+        audience: account
         client_id: tiled
         client_secret: tiled-secret
         device_flow_client_id: tiled-cli
