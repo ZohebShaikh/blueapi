@@ -57,7 +57,6 @@ services:
       - POSTGRES_PASSWORD=tiled_pg
     volumes:
       - ./services/tiled_config/config.yml:/deploy/config/config_for_containerfile.yml
-      - ./services/tiled_config/tiled_data:/storage
     command: ["tiled", "serve", "config", "--host", "0.0.0.0", "--port", "8407"]
     depends_on:
       keycloak:
@@ -78,7 +77,6 @@ services:
       # specify one here, so we use 'postgres' as a neutral default.
       - POSTGRES_DB=postgres
     volumes:
-      - ./services/tiled_config/postgres_data:/var/lib/postgresql/data
       - ./services/tiled_config/initdb:/docker-entrypoint-initdb.d
     healthcheck:
       test: pg_isready -U tiled -d postgres
