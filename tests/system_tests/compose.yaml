@@ -50,7 +50,7 @@ services:
       - label=disable
 
   tiled:
-    image: ghcr.io/zohebshaikh/diamond-tiled:0.0.1
+    image: ghcr.io/zohebshaikh/diamond-tiled:0.0.2
     network_mode: host # Port 8407
     environment:
       - PYTHONPATH=/deploy/
