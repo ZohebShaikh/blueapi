@@ -24,4 +24,4 @@ upstreamConfig:
   upstreams:
   - id: tiled
     path: /
-    uri: http://localhost:8407
+    uri: http://localhost:5173

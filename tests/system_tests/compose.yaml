@@ -61,6 +61,42 @@ services:
     depends_on:
       keycloak:
         condition: service_healthy
+      tiled-postgres:
+        condition: service_healthy
+    security_opt:
+      - label=disable
+
+  tiled-postgres:
+    image: docker.io/postgres:16
+    network_mode: host # Port 5432
+    environment:
+      - POSTGRES_USER=tiled
+      - POSTGRES_PASSWORD=tiled_pg
+      # We create two databases, 'tiled_catalog' (metadata) and
+      # 'tiled_storage' (tabular data) below. But it is required to
+      # specify one here, so we use 'postgres' as a neutral default.
+      - POSTGRES_DB=postgres
+    volumes:
+      - ./services/tiled_config/initdb:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: pg_isready -U tiled -d postgres
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    security_opt:
+      - label=disable
+
+  tiled-pgadmin:
+    image: docker.io/dpage/pgadmin4:9
+    network_mode: host # Port 8408
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@example.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+      - PGADMIN_LISTEN_PORT=8408
+    depends_on:
+      tiled-postgres:
+        condition: service_healthy
     security_opt:
       - label=disable
 
