@@ -67,7 +67,7 @@ services:
       - label=disable
 
   tiled-postgres:
-    image: docker.io/postgres:16
+    image: docker.io/postgres:18
     network_mode: host # Port 5432
     environment:
       - POSTGRES_USER=tiled
@@ -78,6 +78,7 @@ services:
       - POSTGRES_DB=postgres
     volumes:
       - ./services/tiled_config/initdb:/docker-entrypoint-initdb.d
+      - ./services/postgres_backup:/pg_data_prod:ro
     healthcheck:
       test: pg_isready -U tiled -d postgres
       interval: 10s
@@ -94,6 +95,8 @@ services:
       - PGADMIN_DEFAULT_EMAIL=admin@example.com
       - PGADMIN_DEFAULT_PASSWORD=admin
       - PGADMIN_LISTEN_PORT=8408
+    volumes:
+      - ./services/tiled_config/postgresql_db_data:/var/lib/postgresql/data
     depends_on:
       tiled-postgres:
         condition: service_healthy
@@ -142,3 +145,17 @@ services:
         condition: service_healthy
     security_opt:
       - label=disable
+
+  # tiled-redis:
+  #   image: docker.io/redis:7-alpine
+  #   command: redis-server --requirepass ${REDIS_PASSWORD}
+  #   volumes:
+  #     - redis_data:/data
+  #   restart: unless-stopped
+  #   networks: host #
+  #   healthcheck:
+  #     test: redis-cli -a ${REDIS_PASSWORD} ping
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #     start_period: 5s
