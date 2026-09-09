@@ -29,8 +29,8 @@ dependencies = [
     "GitPython>=3.1.58",                             #security base min https://github.com/advisories/GHSA-4gmw-gg2m-w46p
     "event-model==1.24.0",                           # https://github.com/DiamondLightSource/blueapi/issues/684
     "bluesky-stomp>=0.1.6",
-    "opentelemetry-distro>=0.48b0",
-    "opentelemetry-instrumentation-fastapi>=0.48b0",
+    "opentelemetry-distro>=0.49b0",                  # 0.48b0 pins opentelemetry-instrumentation==0.48b0, which imports pkg_resources and raises a DeprecationWarning on import (https://github.com/DiamondLightSource/blueapi/issues/1543)
+    "opentelemetry-instrumentation-fastapi>=0.49b0", # same as above
     "observability-utils>=0.1.4",
     "pyjwt[crypto]",
     "tomlkit",
