@@ -1,6 +1,7 @@
 import dataclasses
 import itertools
 import threading
+import time
 from collections.abc import Callable, Iterable
 from concurrent.futures import Future
 from pathlib import Path
@@ -213,6 +214,18 @@ def test_stop_with_task_pending(inert_worker: TaskWorker) -> None:
     inert_worker.start()
     inert_worker.submit_task(_SIMPLE_TASK)
     inert_worker.stop()
+
+
+def test_stop_interrupts_active_task(worker: TaskWorker) -> None:
+    task_id = worker.submit_task(_LONG_TASK)
+    worker.begin_task(task_id)
+
+    start = time.monotonic()
+    worker.stop()
+    elapsed = time.monotonic() - start
+
+    # _LONG_TASK sleeps for 1 second: stop() should not wait for it to finish
+    assert elapsed < 1.0
 
 
 def test_restart_leaves_task_pending(worker: TaskWorker) -> None:

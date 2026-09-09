@@ -346,6 +346,13 @@ class TaskWorker:
 
         # If the worker has not yet started there is nothing to do.
         if self._started.is_set():
+            if self._current is not None and not self._current.is_complete:
+                LOGGER.info("Stopping active task so the worker can shut down")
+                try:
+                    self._ctx.run_engine.stop()
+                except TransitionError:
+                    # The task may have completed in the meantime, nothing to do
+                    pass
             self._task_channel.put(KillSignal())
         else:
             LOGGER.info("Stopping worker: nothing to do")
