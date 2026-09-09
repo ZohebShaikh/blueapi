@@ -47,6 +47,22 @@
         "ghcr.io/diamondlightsource/ubuntu-devcontainer"
       ],
       "enabled": false
+    },
+    {
+      "description": "Automerge low-risk GitHub Actions not managed by python-copier-template, checking once every 2 weeks (options: automerge/automergeSchedule at https://docs.renovatebot.com/configuration-options/#automerge and https://docs.renovatebot.com/configuration-options/#automergeschedule)",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchPackageNames": [
+        "github/codeql-action/init",
+        "github/codeql-action/analyze",
+        "Azure/setup-helm",
+        "hoverkraft-tech/compose-action"
+      ],
+      "automerge": true,
+      "automergeSchedule": [
+        "* * */14 * *"
+      ]
     }
   ]
 }
