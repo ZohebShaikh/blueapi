@@ -41,14 +41,17 @@ CONFIG_SCHEMA_LOCATION = (
 )
 
 
-def _expand_env(loader: yaml.Loader, node: yaml.ScalarNode) -> str:
+def _expand_env(loader: yaml.SafeLoader, node: yaml.ScalarNode) -> str:
     value = loader.construct_scalar(node)
     return Template(value).safe_substitute(os.environ)
 
 
-# Configure yaml parser to expand environment variables
-yaml.Loader.add_implicit_resolver("!expand", re.compile(r".*\$.*"), None)
-yaml.Loader.add_constructor("!expand", _expand_env)
+# Configure yaml parser to expand environment variables. Registered on
+# SafeLoader (and used via yaml.load(..., yaml.SafeLoader) below) rather than
+# the default Loader, which can be made to instantiate arbitrary Python
+# objects (e.g. via `!!python/object/apply:os.system`) from a config file.
+yaml.SafeLoader.add_implicit_resolver("!expand", re.compile(r".*\$.*"), None)
+yaml.SafeLoader.add_constructor("!expand", _expand_env)
 
 
 class SourceKind(StrEnum):
@@ -437,7 +440,7 @@ class ConfigLoader(Generic[C]):
 
         for path in paths:
             with path.open("r") as stream:
-                self.use_values(yaml.load(stream, yaml.Loader))
+                self.use_values(yaml.load(stream, yaml.SafeLoader))
 
     def load(self) -> C:
         """

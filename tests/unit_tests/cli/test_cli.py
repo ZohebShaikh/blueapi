@@ -1239,7 +1239,7 @@ def test_wrapper_is_a_directory_error(
     config: ApplicationConfig = ApplicationConfig(auth_token_path=tmp_path)
     config_path = tmp_path / "config.yaml"
     with open(config_path, mode="w") as valid_auth_config_file:
-        valid_auth_config_file.write(yaml.dump(config.model_dump()))
+        valid_auth_config_file.write(yaml.dump(config.model_dump(mode="json")))
     result = runner.invoke(main, ["-c", config_path.as_posix(), "login"])
     assert (
         "Invalid path: a directory path was provided instead of a file path\n"
@@ -1255,7 +1255,7 @@ def test_wrapper_permission_error(
     config: ApplicationConfig = ApplicationConfig(auth_token_path=token_file)
     config_path = tmp_path / "config.yaml"
     with open(config_path, mode="w") as valid_auth_config_file:
-        valid_auth_config_file.write(yaml.dump(config.model_dump()))
+        valid_auth_config_file.write(yaml.dump(config.model_dump(mode="json")))
     with patch.object(Path, "write_text", side_effect=PermissionError):
         result = runner.invoke(main, ["-c", config_path.as_posix(), "login"])
     assert f"Permission denied: Cannot write to {token_file}\n" == result.stdout

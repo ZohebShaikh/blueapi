@@ -75,7 +75,7 @@ def config_with_auth(token_cache_file: Path, tmp_path: Path) -> str:
     config = ApplicationConfig(auth_token_path=token_cache_file)
     config_path = tmp_path / "auth_config.yaml"
     with open(config_path, mode="w") as valid_auth_config_file:
-        valid_auth_config_file.write(yaml.dump(config.model_dump()))
+        valid_auth_config_file.write(yaml.dump(config.model_dump(mode="json")))
     return config_path.as_posix()
 
 
