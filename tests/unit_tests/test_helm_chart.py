@@ -33,6 +33,19 @@ ManifestKind = Literal[
 ]
 GroupedManifests = Mapping[ManifestKind, Mapping[str, Mapping[str, Any]]]
 
+DEFAULT_RESOURCES = {
+    "requests": {
+        "cpu": "200m",
+        "memory": "400Mi",
+        "ephemeral-storage": "4Gi",
+    },
+    "limits": {
+        "cpu": "2000m",
+        "memory": "4000Mi",
+        "ephemeral-storage": "8Gi",
+    },
+}
+
 HIGH_RESOURCES = {
     "requests": {
         "cpu": "10000m",
@@ -203,6 +216,16 @@ def test_container_gets_container_resources():
     )
 
 
+def test_default_resources_include_ephemeral_storage():
+    manifests = render_chart()
+    assert (
+        manifests["StatefulSet"]["blueapi"]["spec"]["template"]["spec"]["containers"][
+            0
+        ]["resources"]
+        == DEFAULT_RESOURCES
+    )
+
+
 @pytest.mark.parametrize(
     "url,expected_port",
     [
@@ -258,6 +281,36 @@ def test_init_container_gets_container_resources_by_default():
             "initContainers"
         ][0]["resources"]
         == HIGH_RESOURCES
+    )
+
+
+def test_init_container_gets_default_resources_including_ephemeral_storage():
+    manifests = render_chart(
+        values={
+            "worker": {
+                "scratch": {
+                    "root": "/foo",
+                    "required_gid": 12345,
+                    "repositories": [
+                        {
+                            "name": "foo",
+                            "remote_url": "https://example.git",
+                        },
+                        {
+                            "name": "bar",
+                            "remote_url": "https://example.git",
+                        },
+                    ],
+                },
+            },
+            "initContainer": {"enabled": True},
+        }
+    )
+    assert (
+        manifests["StatefulSet"]["blueapi"]["spec"]["template"]["spec"][
+            "initContainers"
+        ][0]["resources"]
+        == DEFAULT_RESOURCES
     )
 
 
