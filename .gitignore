@@ -71,3 +71,7 @@ lockfiles/
 
 # Editor/IDE project files
 .idea/
+
+# Helm chart dependencies, fetched by `helm dependency update`
+helm/**/charts/*.tgz
+helm/**/Chart.lock

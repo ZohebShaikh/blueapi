@@ -169,6 +169,51 @@
             "description": "May be required to run on specific nodes (e.g. the control machine)",
             "type": "object"
         },
+        "oauth2-proxy": {
+            "description": "Basic configuration for https://github.com/oauth2-proxy/manifests, packaged as a dependency of this chart so it can be deployed alongside blueapi to authenticate access to the ingress. Any value accepted by that chart may be set here.",
+            "type": "object",
+            "properties": {
+                "config": {
+                    "type": "object",
+                    "properties": {
+                        "clientID": {
+                            "description": "OAuth client ID, may be in the form ${ENV_VAR} to be fetched from an environment variable",
+                            "type": "string"
+                        },
+                        "clientSecret": {
+                            "description": "OAuth client secret, may be in the form ${ENV_VAR} to be fetched from an environment variable",
+                            "type": "string"
+                        },
+                        "cookieSecret": {
+                            "description": "Used by oauth2-proxy to encrypt session cookies, generate with e.g. `openssl rand -base64 32 | head -c 32 | base64`",
+                            "type": "string"
+                        }
+                    }
+                },
+                "enabled": {
+                    "description": "Deploys oauth2-proxy as part of this release when true",
+                    "type": "boolean"
+                },
+                "extraArgs": {
+                    "description": "Passed straight through to oauth2-proxy as command line arguments, see https://oauth2-proxy.github.io/oauth2-proxy/configuration/overview for the full list",
+                    "type": "object",
+                    "properties": {
+                        "email-domain": {
+                            "type": "string"
+                        },
+                        "oidc-issuer-url": {
+                            "type": "string"
+                        },
+                        "provider": {
+                            "type": "string"
+                        },
+                        "upstreams": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "podAnnotations": {
             "type": "object"
         },

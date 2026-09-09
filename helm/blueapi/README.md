@@ -4,6 +4,12 @@ A Helm chart deploying a worker pod that runs Bluesky plans
 
 **Homepage:** <https://github.com/DiamondLightSource/blueapi>
 
+## Requirements
+
+| Repository | Name | Version |
+|------------|------|---------|
+| https://oauth2-proxy.github.io/manifests | oauth2-proxy | ^10.0.0 |
+
 ## Values
 
 | Key | Type | Default | Description |
@@ -30,6 +36,12 @@ A Helm chart deploying a worker pod that runs Bluesky plans
 | livenessProbe | object | `{"failureThreshold":3,"httpGet":{"path":"/healthz","port":"http"},"periodSeconds":10}` | Liveness probe, if configured kubernetes will kill the pod and start a new one if failed consecutively. This is automatically disabled when in debug mode. |
 | nameOverride | string | `""` |  |
 | nodeSelector | object | `{}` | May be required to run on specific nodes (e.g. the control machine) |
+| oauth2-proxy | object | `{"config":{"clientID":"","clientSecret":"","cookieSecret":""},"enabled":false,"extraArgs":{"email-domain":"*","oidc-issuer-url":"","provider":"oidc","upstreams":"http://blueapi"}}` | Basic configuration for https://github.com/oauth2-proxy/manifests, packaged as a dependency of this chart so it can be deployed alongside blueapi to authenticate access to the ingress. Any value accepted by that chart may be set here. |
+| oauth2-proxy.config.clientID | string | `""` | OAuth client ID, may be in the form ${ENV_VAR} to be fetched from an environment variable |
+| oauth2-proxy.config.clientSecret | string | `""` | OAuth client secret, may be in the form ${ENV_VAR} to be fetched from an environment variable |
+| oauth2-proxy.config.cookieSecret | string | `""` | Used by oauth2-proxy to encrypt session cookies, generate with e.g. `openssl rand -base64 32 | head -c 32 | base64` |
+| oauth2-proxy.enabled | bool | `false` | Deploys oauth2-proxy as part of this release when true |
+| oauth2-proxy.extraArgs | object | `{"email-domain":"*","oidc-issuer-url":"","provider":"oidc","upstreams":"http://blueapi"}` | Passed straight through to oauth2-proxy as command line arguments, see https://oauth2-proxy.github.io/oauth2-proxy/configuration/overview for the full list |
 | podAnnotations | object | `{}` |  |
 | podLabels | object | `{}` |  |
 | podSecurityContext | object | `{}` |  |

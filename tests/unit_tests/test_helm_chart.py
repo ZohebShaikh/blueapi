@@ -24,7 +24,9 @@ BLUEAPI_HELM_CHART = Path(__file__).parent.parent.parent / "helm" / "blueapi"
 Values = Mapping[str, Any]
 ManifestKind = Literal[
     "ConfigMap",
+    "Deployment",
     "Ingress",
+    "Secret",
     "Service",
     "StatefulSet",
     "PersistentVolumeClaim",
@@ -1157,6 +1159,30 @@ def test_ingress_not_created():
         }
     )
     assert "Ingress" not in manifests
+
+
+def test_oauth2_proxy_not_deployed_by_default():
+    manifests = render_chart()
+    assert "Deployment" not in manifests
+    assert not any(
+        name.endswith("oauth2-proxy") for name in manifests.get("Secret", {})
+    )
+
+
+def test_oauth2_proxy_deployed_when_enabled():
+    manifests = render_chart(
+        values={
+            "oauth2-proxy": {
+                "enabled": True,
+                "config": {
+                    "clientID": "blueapi",
+                    "clientSecret": "secret",
+                    "cookieSecret": "cookie-secret-value",
+                },
+            }
+        }
+    )
+    assert any(name.endswith("oauth2-proxy") for name in manifests["Deployment"])
 
 
 @pytest.mark.parametrize("service_port", [80, 800])

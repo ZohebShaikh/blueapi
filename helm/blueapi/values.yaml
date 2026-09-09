@@ -75,6 +75,27 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
+# -- Basic configuration for https://github.com/oauth2-proxy/manifests, packaged as a
+# dependency of this chart so it can be deployed alongside blueapi to authenticate
+# access to the ingress. Any value accepted by that chart may be set here.
+oauth2-proxy:
+  # -- Deploys oauth2-proxy as part of this release when true
+  enabled: false
+  config:
+    # -- OAuth client ID, may be in the form ${ENV_VAR} to be fetched from an environment variable
+    clientID: ""
+    # -- OAuth client secret, may be in the form ${ENV_VAR} to be fetched from an environment variable
+    clientSecret: ""
+    # -- Used by oauth2-proxy to encrypt session cookies, generate with e.g. `openssl rand -base64 32 | head -c 32 | base64`
+    cookieSecret: ""
+  # -- Passed straight through to oauth2-proxy as command line arguments, see
+  # https://oauth2-proxy.github.io/oauth2-proxy/configuration/overview for the full list
+  extraArgs:
+    provider: oidc
+    oidc-issuer-url: ""
+    email-domain: "*"
+    upstreams: http://blueapi
+
 # -- Sets the compute resources available to the pod.
 # These defaults are appropriate when using debug mode or an internal PVC and therefore
 # running VS Code server in the pod.
