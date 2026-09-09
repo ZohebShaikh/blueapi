@@ -274,6 +274,36 @@ components:
       - message
       title: TaskError
       type: object
+    TaskParamsValidationRequest:
+      additionalProperties: false
+      description: Request to validate the parameters of a task, without submitting
+        it
+      properties:
+        name:
+          description: Name of plan to run
+          title: Name
+          type: string
+        params:
+          additionalProperties: true
+          description: Values for parameters to plan, if any
+          title: Params
+          type: object
+      required:
+      - name
+      title: TaskParamsValidationRequest
+      type: object
+    TaskParamsValidationResponse:
+      additionalProperties: false
+      description: Result of validating the parameters of a task
+      properties:
+        valid:
+          description: Whether the task params are valid
+          title: Valid
+          type: boolean
+      required:
+      - valid
+      title: TaskParamsValidationResponse
+      type: object
     TaskRequest:
       additionalProperties: false
       description: Request to run a task with related info
@@ -449,7 +479,7 @@ info:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   title: BlueAPI Control
-  version: 1.5.0
+  version: 1.6.0
 openapi: 3.1.0
 paths:
   /api/v1/devices:
@@ -663,6 +693,37 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Submit Task
+      tags:
+      - Task
+  /api/v1/tasks/validate:
+    post:
+      description: Validate the parameters of a task without submitting it.
+      operationId: validate_task_params_api_v1_tasks_validate_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskParamsValidationRequest'
+              examples:
+              - name: count
+                params:
+                  detectors:
+                  - x
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskParamsValidationResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Validate Task Params
       tags:
       - Task
   /api/v1/tasks/{task_id}:

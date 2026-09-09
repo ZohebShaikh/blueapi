@@ -72,6 +72,25 @@ class TaskRequest(BlueapiBaseModel):
     )
 
 
+class TaskParamsValidationRequest(BlueapiBaseModel):
+    """
+    Request to validate the parameters of a task, without submitting it
+    """
+
+    name: str = Field(description="Name of plan to run")
+    params: Mapping[str, Any] = Field(
+        description="Values for parameters to plan, if any", default_factory=dict
+    )
+
+
+class TaskParamsValidationResponse(BlueapiBaseModel):
+    """
+    Result of validating the parameters of a task
+    """
+
+    valid: bool = Field(description="Whether the task params are valid")
+
+
 class DeviceRequest(BlueapiBaseModel):
     """
     A query for devices

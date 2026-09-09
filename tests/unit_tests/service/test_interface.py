@@ -11,7 +11,7 @@ from bluesky.protocols import Stoppable
 from bluesky.utils import MsgGenerator
 from bluesky_stomp.messaging import StompClient
 from ophyd_async.epics.motor import Motor
-from pydantic import HttpUrl
+from pydantic import HttpUrl, ValidationError
 from pytest_httpx import HTTPXMock
 from stomp.connect import StompConnection11 as Connection
 
@@ -34,6 +34,7 @@ from blueapi.service.model import (
     ProtocolInfo,
     PythonEnvironmentResponse,
     SourceInfo,
+    TaskParamsValidationRequest,
     TaskRequest,
     WorkerTask,
 )
@@ -205,6 +206,29 @@ def test_submit_task(context_mock: MagicMock):
         uuid_mock.return_value = uuid.UUID(mock_uuid_value)
         task_uuid = interface.submit_task(task)
     assert task_uuid == mock_uuid_value
+
+
+@patch("blueapi.service.interface.context")
+def test_validate_task_params(context_mock: MagicMock):
+    context = BlueskyContext()
+    context.register_plan(my_second_plan)
+    context_mock.return_value = context
+
+    task_request = TaskParamsValidationRequest(
+        name="my_second_plan", params={"repeats": 1}
+    )
+    assert interface.validate_task_params(task_request) is True
+
+
+@patch("blueapi.service.interface.context")
+def test_validate_task_params_invalid(context_mock: MagicMock):
+    context = BlueskyContext()
+    context.register_plan(my_second_plan)
+    context_mock.return_value = context
+
+    task_request = TaskParamsValidationRequest(name="my_second_plan", params={})
+    with pytest.raises(ValidationError):
+        interface.validate_task_params(task_request)
 
 
 @patch("blueapi.service.interface.context")

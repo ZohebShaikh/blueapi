@@ -190,6 +190,17 @@ def test_submit_task(
     ]
 
 
+def test_validate_task_params(worker: TaskWorker) -> None:
+    assert worker.validate_task_params(_SIMPLE_TASK) is True
+    assert worker.get_tasks() == []
+
+
+def test_validate_task_params_invalid(worker: TaskWorker) -> None:
+    with pytest.raises(pydantic.ValidationError):
+        worker.validate_task_params(Task(name="sleep", params={}))
+    assert worker.get_tasks() == []
+
+
 def test_submit_multiple_tasks(worker: TaskWorker) -> None:
     assert worker.get_tasks() == []
     task_id_1 = worker.submit_task(_SIMPLE_TASK)

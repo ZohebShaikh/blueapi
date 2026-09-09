@@ -288,6 +288,18 @@ class TaskWorker:
         self._pending_tasks[task_id] = trackable_task
         return task_id
 
+    @start_as_current_span(TRACER, "task.name", "task.params")
+    def validate_task_params(self, task: Task) -> bool:
+        """
+        Validates the params of a task without submitting it
+        Args:
+            task: A description of the task
+        Returns:
+            bool: True if the params are valid
+        """
+        task.prepare_params(self._ctx)  # Will raise if parameters are invalid
+        return True
+
     @start_as_current_span(
         TRACER,
         "trackable_task.task_id",

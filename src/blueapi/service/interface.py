@@ -22,6 +22,7 @@ from blueapi.service.model import (
     PlanModel,
     PythonEnvironmentResponse,
     SourceInfo,
+    TaskParamsValidationRequest,
     TaskRequest,
     WorkerTask,
 )
@@ -174,6 +175,12 @@ def submit_task(
         metadata=metadata,
     )
     return worker().submit_task(task)
+
+
+def validate_task_params(task_request: TaskParamsValidationRequest) -> bool:
+    """Validate the params of a task without submitting it"""
+    task = Task(name=task_request.name, params=task_request.params)
+    return worker().validate_task_params(task)
 
 
 def clear_task(task_id: str) -> str:

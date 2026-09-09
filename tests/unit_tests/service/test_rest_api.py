@@ -33,6 +33,7 @@ from blueapi.service.interface import (
     pause_worker,
     resume_worker,
     submit_task,
+    validate_task_params,
 )
 from blueapi.service.model import (
     DeviceModel,
@@ -42,6 +43,7 @@ from blueapi.service.model import (
     PythonEnvironmentResponse,
     SourceInfo,
     StateChangeRequest,
+    TaskParamsValidationRequest,
     TaskRequest,
     WorkerTask,
 )
@@ -367,6 +369,42 @@ def test_create_task_validation_error(mock_runner: Mock, client: TestClient) -> 
             }
         ]
     }
+
+
+def test_validate_task_params(mock_runner: Mock, client: TestClient) -> None:
+    task_request = TaskParamsValidationRequest(
+        name="count",
+        params={"detectors": ["x"]},
+    )
+
+    mock_runner.run.return_value = True
+
+    response = client.post("/api/v1/tasks/validate", json=task_request.model_dump())
+
+    mock_runner.run.assert_called_with(validate_task_params, task_request)
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json() == {"valid": True}
+
+
+def test_validate_task_params_validation_error(
+    mock_runner: Mock, client: TestClient
+) -> None:
+    mock_runner.run.side_effect = [
+        ValidationError.from_exception_data(
+            title="ValueError",
+            line_errors=[
+                InitErrorDetails(
+                    type="missing", loc=("id",), msg="value is required for Identifier"
+                )  # type: ignore
+            ],
+        ),
+    ]
+
+    response = client.post(
+        "/api/v1/tasks/validate",
+        json={"name": "my-plan"},
+    )
+    assert response.status_code == 422
 
 
 def test_put_plan_begins_task(client: TestClient) -> None:

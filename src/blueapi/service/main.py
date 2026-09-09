@@ -77,6 +77,8 @@ from .model import (
     PythonEnvironmentResponse,
     SourceInfo,
     StateChangeRequest,
+    TaskParamsValidationRequest,
+    TaskParamsValidationResponse,
     TaskRequest,
     TaskResponse,
     TasksListResponse,
@@ -362,6 +364,52 @@ def submit_task(
         ]
 
         LOGGER.info("Error submitting task: %s - %s", task_request, e)
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail=errors,
+        ) from e
+
+
+example_task_params_validation_request = TaskParamsValidationRequest(
+    name="count",
+    params={"detectors": ["x"]},
+)
+
+
+@secure_router_v1.post(
+    "/tasks/validate", status_code=status.HTTP_200_OK, tags=[Tag.TASK]
+)
+@start_as_current_span(
+    TRACER,
+    "task_request.name",
+    "task_request.params",
+)
+def validate_task_params(
+    task_request: Annotated[
+        TaskParamsValidationRequest,
+        Body(..., examples=[example_task_params_validation_request]),
+    ],
+    runner: Annotated[WorkerDispatcher, Depends(_runner)],
+) -> TaskParamsValidationResponse:
+    """Validate the parameters of a task without submitting it."""
+    try:
+        valid: bool = runner.run(interface.validate_task_params, task_request)
+        return TaskParamsValidationResponse(valid=valid)
+    except ValidationError as e:
+        # Add body/params context to location and ensure that all required
+        # fields defined in the generated schema are present
+        errors = [
+            {
+                "loc": ["body", "params", *err.get("loc", [])],
+                "msg": err.get("msg", None),
+                "type": err.get("type", None),
+                # Input is not listed as required but is useful to have if available
+                "input": err.get("input", None),
+            }
+            for err in e.errors()
+        ]
+
+        LOGGER.info("Error validating task params: %s - %s", task_request, e)
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
             detail=errors,
