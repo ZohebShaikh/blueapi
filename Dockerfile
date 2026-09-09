@@ -40,6 +40,11 @@ FROM ubuntu:resolute AS runtime
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y --no-install-recommends \
     # Git required for installing packages at runtime
     git \
+    # ssh client lets git push/pull scratch repositories over SSH, and socat
+    # lets a locally running ssh-agent be forwarded into this pod so
+    # credentials never need to be stored in the (possibly shared) scratch PVC
+    openssh-client \
+    socat \
     # gdb required for attaching debugger
     gdb \
     # May be required if attaching devcontainer
