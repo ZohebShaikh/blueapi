@@ -22,6 +22,7 @@ from bluesky.utils import MsgGenerator
 from dodal.common import PlanGenerator, inject
 from ophyd_async.core import (
     Device,
+    DeviceVector,
     PathProvider,
     StandardDetector,
     StaticPathProvider,
@@ -139,6 +140,13 @@ def alt_motor(run_engine: RunEngine) -> Motor:
 
 
 @pytest.fixture
+def sim_motor_vector(run_engine: RunEngine) -> DeviceVector[Motor]:
+    with init_devices(mock=True):
+        vector = DeviceVector({1: Motor("VEC:1:"), 2: Motor("VEC:2:")})
+    return vector
+
+
+@pytest.fixture
 def sim_detector(tmp_path: Path) -> StandardDetector:
     path_provider = StaticPathProvider(UUIDFilenameProvider(), tmp_path)
     with init_devices(mock=True):
@@ -156,6 +164,13 @@ def devicey_context(sim_motor: Motor, sim_detector: StandardDetector) -> Bluesky
     ctx = BlueskyContext()
     ctx.register_device(sim_motor)
     ctx.register_device(sim_detector)
+    return ctx
+
+
+@pytest.fixture
+def vector_context(sim_motor_vector: DeviceVector) -> BlueskyContext:
+    ctx = BlueskyContext()
+    ctx.register_device(sim_motor_vector, "vector")
     return ctx
 
 
@@ -312,6 +327,28 @@ def test_lookup_nonexistent_device_child(devicey_context: BlueskyContext):
 def test_lookup_non_device(devicey_context: BlueskyContext):
     with pytest.raises(ValueError):
         devicey_context.find_device("sim.name")
+
+
+# Regression test for https://github.com/DiamondLightSource/blueapi/issues/1555
+@pytest.mark.parametrize(
+    "addr", ["vector.1", "vector.2", ["vector", "1"], ["vector", "2"]]
+)
+def test_lookup_device_vector_child(
+    vector_context: BlueskyContext, addr: str | list[str]
+):
+    device = vector_context.find_device(addr)
+    assert is_bluesky_compatible_device(device)
+
+
+def test_lookup_device_vector_child_is_correct_device(
+    vector_context: BlueskyContext, sim_motor_vector: DeviceVector
+):
+    assert vector_context.find_device("vector.1") is sim_motor_vector[1]
+    assert vector_context.find_device("vector.2") is sim_motor_vector[2]
+
+
+def test_lookup_nonexistent_device_vector_child(vector_context: BlueskyContext):
+    assert vector_context.find_device("vector.99") is None
 
 
 def test_add_non_plan(empty_context: BlueskyContext):

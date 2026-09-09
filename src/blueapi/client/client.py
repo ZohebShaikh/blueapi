@@ -145,6 +145,9 @@ class DeviceRef:
             raise AttributeError(f"No child device named {name}")
         return self._cache[f"{self.name}.{name}"]
 
+    def __getitem__(self, index: int) -> "DeviceRef":
+        return self._cache[f"{self.name}.{index}"]
+
     def __repr__(self):
         return f"Device({self.name})"
 

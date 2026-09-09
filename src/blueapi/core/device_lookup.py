@@ -1,3 +1,4 @@
+from collections.abc import Mapping
 from typing import Any
 
 from .bluesky_types import Device, is_bluesky_compatible_device
@@ -5,11 +6,12 @@ from .bluesky_types import Device, is_bluesky_compatible_device
 
 def find_component(obj: Any, addr: list[str]) -> Device | None:
     """
-    Best effort function to locate a child device, either in a dictionary of
-    devices or a device with child attributes.
+    Best effort function to locate a child device, either in a mapping of
+    devices (such as a plain dictionary or an ophyd-async ``DeviceVector``)
+    or a device with child attributes.
 
     Args:
-        obj (Any): Root device or dictionary of devices
+        obj (Any): Root device or mapping of devices
         addr (List[str]): Address of target device e.g. motors.x
 
     Raises:
@@ -22,17 +24,20 @@ def find_component(obj: Any, addr: list[str]) -> Device | None:
     # Split address into head and tail
     head, tail = addr[0], addr[1:]
 
-    # Best effort of how to extract component, if obj is a dictionary,
-    # we assume the component is a key-value within. If obj is a
-    # device, we assume the component is an attribute.
-    # Otherwise, we error.
-    if isinstance(obj, dict):
+    # Best effort of how to extract component, if obj is a mapping (e.g. a
+    # dictionary of devices or a DeviceVector, whose children are keyed by
+    # integer index), we assume the component is a key-value within. If obj
+    # is a device, we assume the component is an attribute. Otherwise, we
+    # error.
+    if isinstance(obj, Mapping):
         component = obj.get(head)
+        if component is None and head.isdigit():
+            component = obj.get(int(head))
     elif is_bluesky_compatible_device(obj):
         component = getattr(obj, head, None)
     else:
         raise ValueError(
-            f"Searching for {addr} in {obj}, but it is not a device or a dictionary"
+            f"Searching for {addr} in {obj}, but it is not a device or a mapping"
         )
 
     # Traverse device tree recursively

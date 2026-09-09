@@ -773,6 +773,20 @@ def test_devices_are_cached(mock_rest):
     mock_rest.get_device.assert_not_called()
 
 
+# Regression test for https://github.com/DiamondLightSource/blueapi/issues/1555
+def test_device_ref_getitem_fetches_indexed_child(mock_rest):
+    cache = DeviceCache(mock_rest)
+    child_model = DeviceModel(name="foo.1", protocols=[])
+    mock_rest.get_device.side_effect = None
+    mock_rest.get_device.return_value = child_model
+
+    child = cache.foo[1]
+
+    mock_rest.get_device.assert_called_once_with("foo.1")
+    assert isinstance(child, DeviceRef)
+    assert child.model == child_model
+
+
 def test_device_cache_repr(client):
     assert repr(client.devices) == "DeviceCache(2 devices)"
 
