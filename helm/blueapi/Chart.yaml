@@ -13,11 +13,14 @@ description: A Helm chart deploying a worker pod that runs Bluesky plans
 # pipeline. Library charts do not define any templates and therefore cannot be deployed.
 type: application
 
-# This is the chart version. This version number is incremented by the release process.
-# Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.1.0
+# This is the chart version. It is versioned independently of the application (appVersion
+# below): bump it by hand, following Semantic Versioning (https://semver.org/), whenever the
+# chart's templates or values change. A new application release does not by itself require a
+# chart version bump, and vice versa.
+version: 2.0.0
 
-# This is the version number of the application being deployed. This version number is incremented by the release process.
-# Versions are not expected to follow Semantic Versioning. They should reflect the version the application is using.
+# This is the version number of the application being deployed. This is set to the git tag by
+# the release process. Versions are not expected to follow Semantic Versioning. They should
+# reflect the version the application is using.
 # It is recommended to use it with quotes.
 appVersion: "0.1.0"
