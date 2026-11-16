@@ -13,10 +13,10 @@
         { "type": "depr", "section": "Deprecations" },
         { "type": "revert", "section": "Reverts" },
         { "type": "docs", "section": "Documentation" },
-        { "type": "refactor", "section": "Code Refactoring", "hidden": true },
-        { "type": "test", "section": "Tests", "hidden": true },
-        { "type": "ci", "section": "CI", "hidden": true },
-        { "type": "chore", "section": "Miscellaneous", "hidden": true }
+        { "type": "refactor", "section": "Code Refactoring" },
+        { "type": "test", "section": "Tests" },
+        { "type": "ci", "section": "CI" },
+        { "type": "chore", "section": "Miscellaneous" }
       ]
     }
   }
