@@ -5,6 +5,7 @@
 [![Coverage](https://codecov.io/gh/DiamondLightSource/blueapi/branch/main/graph/badge.svg)](https://codecov.io/gh/DiamondLightSource/blueapi)
 [![PyPI](https://img.shields.io/pypi/v/blueapi.svg)](https://pypi.org/project/blueapi)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+[![CodSpeed](https://img.shields.io/endpoint?url=https://codspeed.io/badge.json)](https://app.codspeed.io/ZohebShaikh/blueapi?utm_source=badge)
 
 # blueapi
 
